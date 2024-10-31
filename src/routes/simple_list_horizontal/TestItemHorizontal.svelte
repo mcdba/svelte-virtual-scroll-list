@@ -1,20 +1,7 @@
-<script>
-    export let uniqueKey
-    export let width
+<script lang="ts">
+  let { uniqueKey, width } = $props();
 </script>
 
-<div style="width: {width}px">
-    {uniqueKey} Item ({width}px)
+<div style="width: {width}px" class="p-2 bg-slate-200 rounded-2xl h-full">
+  {uniqueKey} Item ({width}px)
 </div>
-
-<style>
-    div {
-        /* Don't set margin top and bottom together! It will break size counting */
-        padding: 8px;
-        color: black;
-        background-color: #f6f6f6;
-        border-radius: 20px;
-        height: 100%;
-        box-sizing: border-box;
-    }
-</style>
