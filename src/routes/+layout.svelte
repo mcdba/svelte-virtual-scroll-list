@@ -8,7 +8,6 @@
         {name: "Simple list horizontal", component: "simple_list_horizontal"},
         {name: "Infinite list", component: "infinite_list"},
         {name: "Page mode", component: "page_list"},
-        {name: "ChangeableData", component: "changable_data"},
         {name: "SimpleListStore", component: "list_store"},
     ]
 

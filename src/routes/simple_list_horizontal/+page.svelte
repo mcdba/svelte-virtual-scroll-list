@@ -17,7 +17,7 @@
   }
 </script>
 
-<div class="h-[300px]">
+<div class="h-[300px] vz">
   <VirtualScroll data={items} key="uniqueKey" isHorizontal={true}>
     {#snippet header()}
          This is a header
@@ -34,15 +34,15 @@
   </VirtualScroll>
 </div>
 <style>
-   :global(.virtual-scroll-item) {
+   .vz :global(.virtual-scroll-item) {
     padding: 0 4px;
   }
 
-   :global(.virtual-scroll-wrapper) {
+  .vz :global(.virtual-scroll-wrapper) {
     display: flex;
     flex-direction: row;
   }
-   :global(.virtual-scroll-root) {
+  .vz :global(.virtual-scroll-root) {
     display: flex;
     flex-direction: row;
   }
