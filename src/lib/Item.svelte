@@ -1,39 +1,51 @@
-<script>
-    import {afterUpdate, createEventDispatcher, onDestroy, onMount} from "svelte"
+<script lang="ts">
+  import { onDestroy, onMount } from "svelte";
 
-    export let horizontal = false
-    export let uniqueKey
-    export let type = "item"
+  interface Props {
+    horizontal?: boolean;
+    uniqueKey: any;
+    type?: string;
+    resize: (event: { id: any; size: number; type: string }) => void;
+    children?: import("svelte").Snippet;
+  }
 
-    let resizeObserver
-    let itemDiv
-    let previousSize
+  let {
+    horizontal = false,
+    uniqueKey,
+    type = "item",
+    children,
+    resize,
+  }: Props = $props();
 
-    const dispatch = createEventDispatcher()
-    const shapeKey = horizontal ? "offsetWidth" : "offsetHeight"
+  let resizeObserver: ResizeObserver;
+  let itemDiv: HTMLDivElement | undefined = $state();
+  let previousSize: number;
 
-    onMount(() => {
-        if (typeof ResizeObserver !== "undefined") {
-            resizeObserver = new ResizeObserver(dispatchSizeChange)
-            resizeObserver.observe(itemDiv)
-        }
-    })
-    afterUpdate(dispatchSizeChange)
-    onDestroy(() => {
-        if (resizeObserver) {
-            resizeObserver.disconnect()
-            resizeObserver = null
-        }
-    })
+  const shapeKey = horizontal ? "offsetWidth" : "offsetHeight";
 
-    function dispatchSizeChange() {
-        const size = itemDiv ? itemDiv[shapeKey] : 0
-        if (size === previousSize) return
-        previousSize = size
-        dispatch("resize", {id: uniqueKey, size, type})
+  onMount(() => {
+    if (typeof ResizeObserver !== "undefined") {
+      if (itemDiv) {
+        resizeObserver = new ResizeObserver(dispatchSizeChange);
+        resizeObserver.observe(itemDiv);
+      }
     }
+  });
+
+  onDestroy(() => {
+    if (resizeObserver) {
+      resizeObserver.disconnect();
+    }
+  });
+
+  function dispatchSizeChange() {
+    const size = itemDiv ? itemDiv[shapeKey] : 0;
+    if (size === previousSize) return;
+    previousSize = size;
+    resize({ id: uniqueKey, size, type });
+  }
 </script>
 
 <div bind:this={itemDiv} class="virtual-scroll-item">
-    <slot/>
+  {@render children?.()}
 </div>

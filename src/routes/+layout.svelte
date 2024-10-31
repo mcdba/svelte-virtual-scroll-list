@@ -1,9 +1,9 @@
-<script>
+<script lang='ts'>
     import {page} from "$app/stores"
     import "../app.css"
+    let {children}=$props()
 
-
-    const pages = [
+    const menuItems = [
         {name: "Simple list", component: "simple_list"},
         {name: "Simple list horizontal", component: "simple_list_horizontal"},
         {name: "Infinite list", component: "infinite_list"},
@@ -11,12 +11,6 @@
         {name: "ChangeableData", component: "changable_data"},
         {name: "SimpleListStore", component: "list_store"},
     ]
-    let current_path = ""
-    function get_path(page) {
-        const route_parts = page.route.id.split("/")
-        return route_parts[route_parts.length - 1]
-    }
-    $: current_path = get_path($page)
 
 </script>
 
@@ -24,49 +18,20 @@
     <title>svelte-virtual-scroll-list example</title>
 </svelte:head>
 
-<main>
-    <h1>svelte-virtual-scroll-list example
-    </h1>
-    <div class="page-selector-container">
-        {#each pages as page}
-        <a
-                href={page.component}
-                class="page-selector"
-                class:active={current_path === page.component}
-        >{page.name}</a>
-        {/each}
-        <a class="source" href="https://github.com/v1ack/svelte-virtual-scroll-list/tree/master/src/routes/{current_path}">Source</a>
+<main class='p-4 mx-auto max-w-5xl'>
+    <h1 class="text-3xl font-black mb-8">svelte-virtual-scroll-list example</h1>
+    <div class="mb-8">
+        <div class="flex items-center gap-2">
+
+            {#each menuItems as item}
+            <a
+            href={item.component}
+            class="px-1 py-0.5 border rounded-md bg-sky-50 hover:bg-sky-200 text-sky-900 border-sky-400 "
+            style={$page.url.pathname.split("/")[2] === item.component ? " font-weight: 700;" : ""}
+            >{item.name} </a>
+            {/each}
+            <a class="underline flex-1 text-right" href="https://github.com/mcdba/svelte-virtual-scroll-list/tree/master/src/routes/{$page.url.pathname.split("/")[2]}">Source</a>
+        </div>
     </div>
-    <slot></slot>
+   {@render children?.()}
 </main>
-
-<style>
-    main {
-        padding: 1em;
-        margin: 0 auto;
-        max-width: 900px;
-    }
-
-    .page-selector-container {
-        margin-bottom: 20px;
-    }
-
-    .page-selector {
-        margin-right: 10px;
-        cursor: pointer;
-        color: blue;
-    }
-
-    .page-selector:hover {
-        text-decoration: underline;
-    }
-
-    .page-selector.active {
-        font-weight: bold;
-    }
-
-    .source {
-        float: right;
-        color: blue;
-    }
-</style>
