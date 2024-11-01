@@ -1,12 +1,13 @@
 <script lang="ts">
   import { onDestroy, onMount } from "svelte";
-
+  import { cn } from "./index.js";
   interface Props {
     horizontal?: boolean;
     uniqueKey: any;
     type?: string;
     resize: (event: { id: any; size: number; type: string }) => void;
     children?: import("svelte").Snippet;
+    class?: string;
   }
 
   let {
@@ -15,6 +16,7 @@
     type = "item",
     children,
     resize,
+    class: className,
   }: Props = $props();
 
   let resizeObserver: ResizeObserver;
@@ -46,6 +48,6 @@
   }
 </script>
 
-<div bind:this={itemDiv} class="virtual-scroll-item">
+<div bind:this={itemDiv} class={cn("virtual-scroll-item", className)}>
   {@render children?.()}
 </div>

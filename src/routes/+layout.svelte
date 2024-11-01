@@ -8,6 +8,7 @@
     { name: "Simple list horizontal", component: "simple_list_horizontal" },
     { name: "Infinite list", component: "infinite_list" },
     { name: "SimpleListStore", component: "list_store" },
+    { name: "Simple Grid", component: "sample_grid" },
   ];
 </script>
 
@@ -15,7 +16,7 @@
   <title>svelte-virtual-scroll-list example</title>
 </svelte:head>
 
-<main class="mx-auto max-w-5xl p-4">
+<main class="container mx-auto p-4">
   <h1 class="mb-8 text-3xl font-black">svelte-virtual-scroll-list example</h1>
   <div class="mb-8">
     <div class="flex items-center gap-2">

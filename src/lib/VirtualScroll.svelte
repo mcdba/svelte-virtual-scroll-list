@@ -26,6 +26,7 @@
     footer?: import("svelte").Snippet;
     class?: string;
     classWrapper?: string;
+    classItem?: string;
   }
 
   let {
@@ -42,6 +43,7 @@
     footer,
     class: className,
     classWrapper,
+    classItem,
   }: Props = $props();
 
   let displayItems: any[] = $state([]);
@@ -235,6 +237,7 @@
         uniqueKey={dataItem[key]}
         horizontal={isHorizontal}
         type="item"
+        class={classItem}
       >
         {@render children?.({ data: dataItem, index: dataIndex })}
       </Item>

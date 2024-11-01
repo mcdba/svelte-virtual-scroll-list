@@ -1,6 +1,4 @@
 <script lang="ts">
-  import { tick } from "svelte";
-  import { flip } from "svelte/animate";
   import { VirtualScroll } from "$lib/index.js";
   import { createSequenceGenerator, randomInteger } from "../mock.js";
   import TestItem from "../TestItem.svelte";
