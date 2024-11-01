@@ -1,4 +1,10 @@
 import VirtualScroll from "./VirtualScroll.svelte";
+import { type ClassValue, clsx } from "clsx";
+import { twMerge } from "tailwind-merge";
 
-export { VirtualScroll };
+function cn(...inputs: ClassValue[]) {
+  return twMerge(clsx(inputs));
+}
+
+export { VirtualScroll, cn };
 export default VirtualScroll;

@@ -1,10 +1,9 @@
 <script lang="ts">
-
   import { VirtualScroll } from "$lib/index.js";
-   import InfiniteLoading from "svelte-infinite-loading";
+  import InfiniteLoading from "svelte-infinite-loading";
 
   import {
-   asyncTimeout,
+    asyncTimeout,
     createSequenceGenerator,
     randomInteger,
   } from "../mock.js";
@@ -13,9 +12,7 @@
   const getItemId = createSequenceGenerator();
 
   let loading = false;
-  let items:any[] = itemsFactory(70);
-
-
+  let items: any[] = itemsFactory(70);
 
   function itemsFactory(count = 10) {
     let new_items = [];
@@ -24,45 +21,34 @@
     return new_items;
   }
 
-  
   // Infinite scroll handler
   async function onInfinite({
     detail,
   }: {
     detail: { complete: () => void; loaded: () => void; error: () => void };
   }) {
-      await asyncTimeout(800);
-        let new_items = itemsFactory(20);
-        items=[...items,...new_items]
-        detail.loaded();
-        if (items.length >=200) detail.complete();
-
+    await asyncTimeout(800);
+    let new_items = itemsFactory(20);
+    items = [...items, ...new_items];
+    detail.loaded();
+    if (items.length >= 200) detail.complete();
   }
-
 </script>
-<p class='mb-8'>await 200 items</p>
+
+<p class="mb-8">await 200 items</p>
 <div class="h-[500px]">
-  <VirtualScroll
+  <VirtualScroll data={items} key="uniqueKey" start={30}>
+    {#snippet header()}
+      Header
+    {/snippet}
+    {#snippet children({ data })}
+      <div class="p-1">
+        <TestItem {...data} />
+      </div>
+    {/snippet}
 
-    data={items}
-    key="uniqueKey"
-    start={30}
-  >
-      {#snippet header()}
-        Header
-    {/snippet}
-   {#snippet children({ data })}
-       <div class="p-1">
-         <TestItem {...data} />
-        </div> 
-    {/snippet}
-    
     {#snippet footer()}
-
-         <InfiniteLoading on:infinite={onInfinite} />
+      <InfiniteLoading on:infinite={onInfinite} />
     {/snippet}
-   
   </VirtualScroll>
 </div>
-
-

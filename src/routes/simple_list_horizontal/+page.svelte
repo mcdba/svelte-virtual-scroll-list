@@ -12,38 +12,26 @@
   function addItems(count = 10) {
     let new_items = [];
     for (let i = 0; i < count; i++)
-      new_items.push({ uniqueKey: getItemId(), width: randomInteger(40, 200) });
+      new_items.push({ uniqueKey: getItemId(), width: randomInteger(80, 200) });
     items = [...items, ...new_items];
   }
 </script>
 
-<div class="h-[300px] vz">
-  <VirtualScroll data={items} key="uniqueKey" isHorizontal={true}>
-    {#snippet header()}
-         This is a header
-        
-    {/snippet}
-    {#snippet children({data})}
-        
-    <TestItem {...data} />
-    {/snippet}
-    
-    {#snippet footer()}
-    This is a footer
-    {/snippet}
-  </VirtualScroll>
-</div>
-<style>
-   .vz :global(.virtual-scroll-item) {
-    padding: 0 4px;
-  }
+<VirtualScroll
+  data={items}
+  key="uniqueKey"
+  isHorizontal={true}
+  class="h-[300px]"
+  classWrapper="flex flex-row gap-2 h-[200px]"
+>
+  {#snippet header()}
+    This is a header
+  {/snippet}
+  {#snippet children({ data })}
+    <TestItem {...data} class="h-[200px]" />
+  {/snippet}
 
-  .vz :global(.virtual-scroll-wrapper) {
-    display: flex;
-    flex-direction: row;
-  }
-  .vz :global(.virtual-scroll-root) {
-    display: flex;
-    flex-direction: row;
-  }
-</style>
+  {#snippet footer()}
+    This is a footer
+  {/snippet}
+</VirtualScroll>

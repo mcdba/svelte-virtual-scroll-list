@@ -1,5 +1,4 @@
 <script lang="ts">
-
   import { VirtualScroll } from "$lib/index.js";
   import { createSequenceGenerator, randomInteger } from "../mock.js";
   import TestItem from "../TestItem.svelte";
@@ -20,25 +19,26 @@
   }
 </script>
 
-<div class="h-[400px] ">
+<div class="h-[400px]">
   <VirtualScroll data={items} key="uniqueKey">
     {#snippet header()}
-    <div class="p-4 bg-purple-200 rounded-xl border-purple-300 border mb-4 text-center font-bold text-xl">
+      <div
+        class="mb-4 rounded-xl border border-purple-300 bg-purple-200 p-4 text-center text-xl font-bold"
+      >
         This is a header snippet
-    </div>
+      </div>
     {/snippet}
 
-    {#snippet children({data})}
-    <div class="mb-4">
-      <TestItem {...data} />
-    </div>
+    {#snippet children({ data })}
+      <TestItem {...data} class="mb-2" />
     {/snippet}
 
     {#snippet footer()}
-        <div class="p-4 bg-teal-200 rounded-xl border-teal-300 border text-center font-bold text-xl">
-       This is a footer snippet
-       </div>   
+      <div
+        class="rounded-xl border border-teal-300 bg-teal-200 p-4 text-center text-xl font-bold"
+      >
+        This is a footer snippet
+      </div>
     {/snippet}
   </VirtualScroll>
 </div>
-

@@ -1,9 +1,8 @@
 <script lang="ts">
-  //TODO bug скачет на первую строку после добавления данных
-
   import Virtual, { isBrowser } from "./virtual.js";
   import Item from "./Item.svelte";
-  import {  onMount } from "svelte";
+  import { onMount } from "svelte";
+  import { cn } from "./index.js";
 
   interface Props {
     // Unique key for getting data from `data`
@@ -18,13 +17,15 @@
     isHorizontal?: boolean;
     // scroll position start index
     start?: number;
-    // scroll position offset
+    // scroll position offsetpnpm i
     offset?: number;
     // Let virtual list using global document to scroll through the list
     pageMode?: boolean;
     header?: import("svelte").Snippet;
     children?: import("svelte").Snippet<[any]>;
     footer?: import("svelte").Snippet;
+    class?: string;
+    classWrapper?: string;
   }
 
   let {
@@ -39,6 +40,8 @@
     header,
     children,
     footer,
+    class: className,
+    classWrapper,
   }: Props = $props();
 
   let displayItems: any[] = $state([]);
@@ -214,15 +217,18 @@
 <div
   bind:this={root}
   onscroll={onScroll}
-  style="overflow-y: auto; height: inherit"
-  class="virtual-scroll-root"
+  style="height: inherit"
+  class={cn("virtual-scroll-root overflow-y-auto ", className)}
 >
   {#if header}
     <Item resize={onItemResized} type="slot" uniqueKey="header">
       {@render header?.()}
     </Item>
   {/if}
-  <div style="padding: {paddingStyle}" class="virtual-scroll-wrapper">
+  <div
+    style="padding: {paddingStyle}"
+    class={cn("virtual-scroll-wrapper", classWrapper)}
+  >
     {#each displayItems as dataItem, dataIndex (dataItem[key])}
       <Item
         resize={onItemResized}

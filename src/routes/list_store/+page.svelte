@@ -15,7 +15,7 @@
   function addItems(top = true, count = 10) {
     let new_items = [];
     for (let i = 0; i < count; i++)
-      new_items.push({ uniqueKey: getItemId(), height: randomInteger(20, 60) });
+      new_items.push({ uniqueKey: getItemId(), height: randomInteger(40, 60) });
     if (top) items = [...new_items, ...items];
     else items = [...items, ...new_items];
   }
@@ -24,18 +24,24 @@
 <div class="h-[300px]">
   <VirtualScroll data={items} key="uniqueKey">
     {#snippet header()}
-         This is a header
-        
+      This is a header
     {/snippet}
-    {#snippet children({data})}
-        
-    <TestItem {...data} />
+    {#snippet children({ data })}
+      <TestItem {...data} class="mb-2" />
     {/snippet}
-    
+
     {#snippet footer()}
-    This is a footer
+      This is a footer
     {/snippet}
   </VirtualScroll>
 </div>
-<button onclick={() => addItems()}>Add 10 to top</button>
-<button onclick={() => addItems(false)}>Add 10 to bottom</button>
+<div class="flex items-center gap-4 p-4">
+  <button
+    class="rounded-md border border-sky-400 bg-sky-50 px-1 py-0.5 text-sky-900 hover:bg-sky-200"
+    onclick={() => addItems()}>Add 10 to top</button
+  >
+  <button
+    class="rounded-md border border-sky-400 bg-sky-50 px-1 py-0.5 text-sky-900 hover:bg-sky-200"
+    onclick={() => addItems(false)}>Add 10 to bottom</button
+  >
+</div>
