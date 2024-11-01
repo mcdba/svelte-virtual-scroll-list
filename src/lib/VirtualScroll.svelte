@@ -217,8 +217,8 @@
 <div
   bind:this={root}
   onscroll={onScroll}
-  style="height: inherit"
-  class={cn("virtual-scroll-root overflow-y-auto ", className)}
+  style="height:inherit;overflow-y:auto"
+  class={cn("virtual-scroll-root", className)}
 >
   {#if header}
     <Item resize={onItemResized} type="slot" uniqueKey="header">
