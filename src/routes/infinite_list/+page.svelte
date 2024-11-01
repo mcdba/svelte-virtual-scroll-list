@@ -4,7 +4,7 @@
    import InfiniteLoading from "svelte-infinite-loading";
 
   import {
-   
+   asyncTimeout,
     createSequenceGenerator,
     randomInteger,
   } from "../mock.js";
@@ -20,7 +20,7 @@
   function itemsFactory(count = 10) {
     let new_items = [];
     for (let i = 0; i < count; i++)
-      new_items.push({ uniqueKey: getItemId(), height: randomInteger(20, 60) });
+      new_items.push({ uniqueKey: getItemId(), height: randomInteger(60, 80) });
     return new_items;
   }
 
@@ -31,14 +31,16 @@
   }: {
     detail: { complete: () => void; loaded: () => void; error: () => void };
   }) {
-       let new_items = itemsFactory(20);
-      items=[...items,...new_items]
-       detail.complete();
- 
+      await asyncTimeout(800);
+        let new_items = itemsFactory(20);
+        items=[...items,...new_items]
+        detail.loaded();
+        if (items.length >=200) detail.complete();
+
   }
 
 </script>
-
+<p class='mb-8'>await 200 items</p>
 <div class="h-[500px]">
   <VirtualScroll
 
@@ -50,8 +52,9 @@
         Header
     {/snippet}
    {#snippet children({ data })}
-        
-    <TestItem {...data} />
+       <div class="p-1">
+         <TestItem {...data} />
+        </div> 
     {/snippet}
     
     {#snippet footer()}
