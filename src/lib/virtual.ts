@@ -43,8 +43,8 @@ export default class {
     padFront: 0,
     padBehind: 0,
   };
-
   sizes = new Map();
+
   constructor(param: any, callUpdate: any) {
     this.callUpdate = callUpdate;
     this.param = param;
@@ -65,7 +65,6 @@ export default class {
   }
 
   // return current render range
-
   isBehind() {
     return this.direction === DIRECTION_TYPE.BEHIND;
   }

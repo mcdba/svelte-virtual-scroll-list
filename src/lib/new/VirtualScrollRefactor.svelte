@@ -1,26 +1,18 @@
 <script lang="ts">
-  import Virtual, { isBrowser } from "./virtual.js";
-  import Item from "./Item.svelte";
+  import Virtual, { isBrowser } from "../virtual.js";
+  import Item from "../Item.svelte";
   import { onMount } from "svelte";
-  import { cn } from "./index.js";
+  import { cn } from "../index.js";
 
   interface Props {
-    // Unique key for getting data from `data`
-    key?: string;
-    // Source for list
-    data: any[];
-    // Count of rendered items
-    keeps?: number;
-    // Estimate size of each item, needs for smooth scrollbar
-    estimateSize?: number;
-    // Scroll direction
-    isHorizontal?: boolean;
-    // scroll position start index
-    start?: number;
-    // scroll position offsetpnpm i
-    offset?: number;
-    // Let virtual list using global document to scroll through the list
-    pageMode?: boolean;
+    key?: string; // Unique key for getting data from `data`
+    data: any[]; // Source for list
+    keeps?: number; // Count of rendered items
+    estimateSize?: number; // Estimate size of each item
+    isHorizontal?: boolean; // Scroll direction
+    start?: number; // Scroll position start index
+    offset?: number; // Scroll position offset
+    pageMode?: boolean; // Use global document to scroll through the list
     header?: import("svelte").Snippet;
     children?: import("svelte").Snippet<[any]>;
     footer?: import("svelte").Snippet;
@@ -56,70 +48,65 @@
       slotFooterSize: 0,
       keeps: keeps,
       estimateSize: estimateSize,
-      buffer: Math.round(keeps / 3), // recommend for a third of keeps
+      buffer: Math.round(keeps / 3), // Recommend for a third of keeps
       uniqueIds: getUniqueIdFromDataSources(),
     },
     onRangeChanged,
   );
+
   let root: HTMLDivElement | undefined = $state();
   let shepherd: HTMLDivElement | undefined = $state();
   let range = null;
 
-  function getOffset() {
-    if (pageMode && isBrowser()) {
-      return (
-        //@ts-ignore
-        document.documentElement[directionKey] || document.body[directionKey]
-      );
-    } else {
-      //@ts-ignore
-      return root ? Math.ceil(root[directionKey]) : 0;
-    }
+  function getOffset(): number {
+    return pageMode && isBrowser()
+      ? document.documentElement[directionKey] || document.body[directionKey]
+      : root
+        ? Math.ceil(root[directionKey])
+        : 0;
   }
 
-  function getClientSize() {
+  function getClientSize(): number {
     const key = isHorizontal ? "clientWidth" : "clientHeight";
-    if (pageMode && isBrowser()) {
-      return document.documentElement[key] || document.body[key];
-    } else {
-      return root ? Math.ceil(root[key]) : 0;
-    }
+    return pageMode && isBrowser()
+      ? document.documentElement[key] || document.body[key]
+      : root
+        ? Math.ceil(root[key])
+        : 0;
   }
 
-  function getScrollSize() {
+  function getScrollSize(): number {
     const key = isHorizontal ? "scrollWidth" : "scrollHeight";
-    if (pageMode && isBrowser()) {
-      return document.documentElement[key] || document.body[key];
-    } else {
-      return root ? Math.ceil(root[key]) : 0;
-    }
+    return pageMode && isBrowser()
+      ? document.documentElement[key] || document.body[key]
+      : root
+        ? Math.ceil(root[key])
+        : 0;
   }
-  export function updatePageModeFront() {
+
+  export function updatePageModeFront(): void {
     if (root && isBrowser()) {
       const rect = root.getBoundingClientRect();
       const { defaultView } = root.ownerDocument;
       const offsetFront = isHorizontal
-        ? rect.left + (defaultView ? defaultView.scrollX : 0)
-        : rect.top + (defaultView ? defaultView.scrollY : 0);
+        ? rect.left + (defaultView?.scrollX || 0)
+        : rect.top + (defaultView?.scrollY || 0);
       virtual.updateParam("slotHeaderSize", offsetFront);
     }
   }
 
-  function scrollToOffset(offset: number) {
+  function scrollToOffset(offset: number): void {
     if (!isBrowser()) return;
+
     if (pageMode) {
-      //@ts-ignore
       document.body[directionKey] = offset;
-      //@ts-ignore
       document.documentElement[directionKey] = offset;
     } else if (root) {
-      //@ts-ignore
-
       root[directionKey] = offset;
     }
   }
 
-  function scrollToIndex(index: number) {
+  function scrollToIndex(index: number): void {
     if (index >= data.length - 1) {
       scrollToBottom();
     } else {
@@ -128,14 +115,11 @@
     }
   }
 
-  function scrollToBottom() {
+  function scrollToBottom(): void {
     if (shepherd) {
       const offset = shepherd[isHorizontal ? "offsetLeft" : "offsetTop"];
       scrollToOffset(offset);
 
-      // check if it's really scrolled to the bottom
-      // maybe list doesn't render and calculate to last range,
-      // so we need retry in next event loop until it really at bottom
       setTimeout(() => {
         if (getOffset() + getClientSize() + 1 < getScrollSize()) {
           scrollToBottom();
@@ -156,53 +140,58 @@
     }
   });
 
-  function getUniqueIdFromDataSources() {
+  function getUniqueIdFromDataSources(): any[] {
     return data.map((dataSource) => dataSource[key]);
   }
 
-  function onItemResized(event: any) {
+  function onItemResized(event: any): void {
     const { id, size, type } = event;
-    if (type === "item") virtual.saveSize(id, size);
-    else if (type === "slot") {
+
+    if (type === "item") {
+      virtual.saveSize(id, size);
+    } else if (type === "slot") {
       if (id === "header") virtual.updateParam("slotHeaderSize", size);
       else if (id === "footer") virtual.updateParam("slotFooterSize", size);
 
-      // virtual.handleSlotSizeChange()
+      // Uncomment if needed:
+      // virtual.handleSlotSizeChange();
     }
   }
 
-  function onRangeChanged(range_: any) {
+  function onRangeChanged(range_: any): void {
     range = range_;
+
     paddingStyle = isHorizontal
-      ? `0px ${range.padBehind}px 0px ${range.padFront}px`
-      : `${range.padFront}px 0px ${range.padBehind}px`;
+      ? `0px ${range.padBehind}px`
+      : `${range.padFront}px ${range.padBehind}px`;
+
     displayItems = data.slice(range.start, range.end + 1);
   }
 
-  function onScroll(event: any) {
+  function onScroll(event: Event): void {
     const offset = getOffset();
+
+    // Avoid processing invalid offsets
     const clientSize = getClientSize();
     const scrollSize = getScrollSize();
 
-    // iOS scroll-spring-back behavior will make direction mistake
-    if (offset < 0 || offset + clientSize > scrollSize || !scrollSize) {
-      return;
-    }
+    if (offset < 0 || offset + clientSize > scrollSize || !scrollSize) return;
 
     virtual.handleScroll(offset);
   }
 
-  function handleKeepsChange(keeps: number) {
+  function handleKeepsChange(keeps: number): void {
     virtual.updateParam("keeps", keeps);
     virtual.handleSlotSizeChange();
   }
 
-  function handleDataSourcesChange(data: any[]) {
+  function handleDataSourcesChange(data: any[]): void {
     virtual.updateParam("uniqueIds", getUniqueIdFromDataSources());
     virtual.handleDataSourcesChange();
-    //FIX original error: start not set to last item when update
-    start = virtual.range.end + 1;
+    start = virtual.range.end + 1; // Fix original error
   }
+
+  // Reactive effects
   $effect(() => scrollToOffset(offset));
   $effect(() => handleDataSourcesChange(data));
   $effect(() => scrollToIndex(start));
@@ -212,7 +201,7 @@
 <div
   bind:this={root}
   onscroll={onScroll}
-  style="height:inherit;overflow-y:auto"
+  style="height: inherit; overflow-y: auto;"
   class={cn("virtual-scroll-root", className)}
 >
   {#if header}
@@ -220,6 +209,7 @@
       {@render header?.()}
     </Item>
   {/if}
+
   <div
     style="padding: {paddingStyle}"
     class={cn("virtual-scroll-wrapper", classWrapper)}
@@ -236,15 +226,17 @@
       </Item>
     {/each}
   </div>
+
   {#if footer}
     <Item resize={onItemResized} type="slot" uniqueKey="footer">
       {@render footer?.()}
     </Item>
   {/if}
+
   <div
     bind:this={shepherd}
     class="shepherd"
-    style="width: {isHorizontal ? '0px' : '100%'};height: {isHorizontal
+    style="width: {isHorizontal ? '0px' : '100%'}; height: {isHorizontal
       ? '100%'
       : '0px'}"
   ></div>
