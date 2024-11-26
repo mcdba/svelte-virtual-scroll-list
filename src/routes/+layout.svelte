@@ -9,6 +9,7 @@
     { name: "Infinite list", component: "infinite_list" },
     { name: "SimpleListStore", component: "list_store" },
     { name: "Simple Grid", component: "sample_grid" },
+    { name: "Simple Grid2", component: "sample_grid2" },
   ];
 </script>
 

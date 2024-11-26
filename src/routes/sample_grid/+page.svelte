@@ -18,7 +18,7 @@
 </script>
 
 <div class="h-[400px]">
-  <VirtualScroll data={gridData} key="key">
+  <VirtualScroll data={gridData} key="key" keeps={6}>
     {#snippet header()}
       <div
         class="mb-4 rounded-xl border border-purple-300 bg-purple-200 p-4 text-center text-xl font-bold"
