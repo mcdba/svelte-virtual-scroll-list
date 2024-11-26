@@ -5,22 +5,14 @@
   import { cn } from "./index.js";
 
   interface Props {
-    // Unique key for getting data from `data`
-    key?: string;
-    // Source for list
-    data: any[];
-    // Count of rendered items
-    keeps?: number;
-    // Estimate size of each item, needs for smooth scrollbar
-    estimateSize?: number;
-    // Scroll direction
-    isHorizontal?: boolean;
-    // scroll position start index
-    start?: number;
-    // scroll position offsetpnpm i
-    offset?: number;
-    // Let virtual list using global document to scroll through the list
-    pageMode?: boolean;
+    key?: string; // Unique key for getting data from `data`
+    data: any[]; // Source for list
+    keeps?: number; // Count of rendered items
+    estimateSize?: number; // Estimate size of each item, needs for smooth scrollbar
+    isHorizontal?: boolean; // Scroll direction
+    start?: number; // scroll position start index
+    offset?: number; // scroll position offsetpnpm i
+    pageMode?: boolean; // Let virtual list using global document to scroll through the list
     header?: import("svelte").Snippet;
     children?: import("svelte").Snippet<[any]>;
     footer?: import("svelte").Snippet;
