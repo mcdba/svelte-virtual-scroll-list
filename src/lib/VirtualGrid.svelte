@@ -1,5 +1,6 @@
 <script lang="ts">
-  import VirtualScroll from "./VirtualScroll.svelte";
+  import { VirtualScroll, cn } from "./index.js";
+
   type Props = {
     child?: import("svelte").Snippet<[any]>;
     header?: import("svelte").Snippet;
@@ -9,25 +10,48 @@
     columns: number;
     keeps?: number;
   };
-  let { data, key, child, columns, keeps, footer, header }: Props = $props();
+  let {
+    data,
+    key = "id",
+    child,
+    columns,
+    keeps,
+    footer,
+    header,
+  }: Props = $props();
   // Function to chunk the array into groups of specified size
   const chunkArray = (array: any[], chunkSize: number) => {
     const result = [];
-    let key = 0;
+    let currentKey = 0;
     for (let i = 0; i < array.length; i += chunkSize) {
-      result.push({ key: key + "", data: array.slice(i, i + chunkSize) });
-      key++;
+      result.push({
+        [key]: currentKey + "",
+        data: array.slice(i, i + chunkSize),
+      });
+      currentKey++;
     }
     return result;
   };
-  const gridData = $state(chunkArray(data, columns));
+  const gridData = $derived(chunkArray(data, columns));
 </script>
 
 <VirtualScroll
   data={gridData}
   {key}
   {keeps}
-  classItem="grid grid-cols-3 gap-4"
+  classItem={cn(
+    "grid gap-4",
+    columns === 1 && "grid-cols-1",
+    columns === 2 && "grid-cols-2",
+    columns === 3 && "grid-cols-3",
+    columns === 4 && "grid-cols-4",
+    columns === 5 && "grid-cols-5",
+    columns === 6 && "grid-cols-6",
+    columns === 7 && "grid-cols-7",
+    columns === 8 && "grid-cols-8",
+    columns === 9 && "grid-cols-9",
+    columns === 10 && "grid-cols-10",
+  )}
   {footer}
   {header}
 >
