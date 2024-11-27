@@ -33,6 +33,7 @@
     return result;
   };
   const gridData = $derived(chunkArray(data, columns));
+  const children_render = $derived(children)
 </script>
 
 <VirtualScroll
@@ -46,7 +47,7 @@
 >
   {#snippet children({ data })}
     {#each data.data as item}
-      {@render children?.({ item })}
+      {@render children_render?.({ item })}
     {/each}
   {/snippet}
 </VirtualScroll>
