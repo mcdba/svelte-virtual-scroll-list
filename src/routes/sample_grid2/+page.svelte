@@ -1,35 +1,37 @@
 <script lang="ts">
   import { VirtualGrid } from "$lib/index.js";
-  import items from "./data.js";
-
-  let currentItems = [...items, ...items];
-  // Function to chunk the array into groups of specified size
-  const chunkArray = (array: any[], chunkSize: number) => {
-    const result = [];
-    let key = 0;
-    for (let i = 0; i < array.length; i += chunkSize) {
-      result.push({ key: key + "", data: array.slice(i, i + chunkSize) });
-      key++;
+  import { faker } from "@faker-js/faker";
+  function generateProducts(numProducts: number) {
+    const products = [];
+    for (let i = 0; i < numProducts; i++) {
+      const product = {
+        key: faker.string.uuid(),
+        name: faker.commerce.productName(),
+        price: parseFloat(faker.commerce.price()),
+        image: faker.image.avatar(),
+      };
+      products.push(product);
     }
-    return result;
-  };
-
-  const data = chunkArray(currentItems, 3);
+    return products;
+  }
+  const data = generateProducts(80);
+  console.log(data);
 </script>
 
-<div class="h-[400px]">
-  <VirtualGrid {data} key="key" columns={3}>
-    {#snippet child({ data })}
+<!-- <pre>{JSON.stringify(data, null, 2)}</pre> -->
+<div class="h-[500px]">
+  <VirtualGrid {data} key="key" columns={3} keeps={8}>
+    {#snippet child({ item })}
       <div
         class="mb-4 overflow-hidden rounded-lg border border-slate-300 bg-slate-200 p-2 shadow-lg"
       >
         <span>
-          {data.key}
+          {item.key}
         </span>
         <h1 class="text-2xl font-bold">
-          {data.name}
+          {item.name}
         </h1>
-        <p>{data.content}</p>
+        <p class="text-4xl font-bold">{item.price}</p>
       </div>
     {/snippet}
   </VirtualGrid>

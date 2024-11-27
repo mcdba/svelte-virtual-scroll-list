@@ -5,8 +5,9 @@
     data: any[];
     key?: string;
     columns: number;
+    keeps?: number;
   };
-  let { data, key, child, columns }: Props = $props();
+  let { data, key, child, columns, keeps }: Props = $props();
   // Function to chunk the array into groups of specified size
   const chunkArray = (array: any[], chunkSize: number) => {
     const result = [];
@@ -20,14 +21,10 @@
   const gridData = $state(chunkArray(data, columns));
 </script>
 
-<VirtualScroll data={gridData} {key} keeps={6}>
+<VirtualScroll data={gridData} {key} {keeps} classItem="grid grid-cols-3 gap-4">
   {#snippet children({ data })}
-    <div class="grid grid-cols-3 gap-4">
-      {#each data.data as item}
-        {#each item.data as data}
-          {@render child?.({ data })}
-        {/each}
-      {/each}
-    </div>
+    {#each data.data as item}
+      {@render child?.({ item })}
+    {/each}
   {/snippet}
 </VirtualScroll>
