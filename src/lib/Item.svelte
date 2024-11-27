@@ -8,6 +8,7 @@
     resize: (event: { id: any; size: number; type: string }) => void;
     children?: import("svelte").Snippet;
     class?: string;
+    style?: string;
   }
 
   let {
@@ -17,6 +18,7 @@
     children,
     resize,
     class: className,
+    style = "",
   }: Props = $props();
 
   let resizeObserver: ResizeObserver;
@@ -48,6 +50,6 @@
   }
 </script>
 
-<div bind:this={itemDiv} class={cn("virtual-scroll-item", className)}>
+<div bind:this={itemDiv} class={cn("virtual-scroll-item", className)} {style}>
   {@render children?.()}
 </div>

@@ -19,6 +19,7 @@
     class?: string;
     classWrapper?: string;
     classItem?: string;
+    styleItem?: string;
   }
 
   let {
@@ -36,6 +37,7 @@
     class: className,
     classWrapper,
     classItem,
+    styleItem = "",
   }: Props = $props();
 
   let displayItems: any[] = $state([]);
@@ -223,6 +225,7 @@
         horizontal={isHorizontal}
         type="item"
         class={classItem}
+        style={styleItem}
       >
         {@render children?.({ data: dataItem, index: dataIndex })}
       </Item>

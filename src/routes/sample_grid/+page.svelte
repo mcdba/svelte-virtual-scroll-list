@@ -41,7 +41,7 @@
         This is a header snippet
       </div>
     {/snippet}
-    {#snippet child({ item })}
+    {#snippet children({ item })}
       <div
         class="mb-4 overflow-hidden rounded-lg border border-slate-300 bg-slate-200 p-2 shadow-lg"
       >
